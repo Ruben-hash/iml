@@ -1,6 +1,7 @@
 from builtins import print
 from email import policy
 from email.parser import BytesParser
+from spf import checkSPF
 
 def mail(file_path):
     with open(file_path, 'rb') as f:
@@ -11,7 +12,8 @@ def mail(file_path):
 def main():
     f = "test.eml"
     msg = mail(f)
-    print(msg)
+    print(type(msg))
+    checkSPF(msg)
 
 if __name__ == "__main__":
     main()
