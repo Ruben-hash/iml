@@ -12,8 +12,7 @@ def mail(file_path):
 def main():
     f = "test.eml"
     msg = mail(f)
-    print(type(msg))
-    checkSPF(msg)
-
+    rep= checkSPF(msg)
+    print(f"SPF result: {rep}")
 if __name__ == "__main__":
     main()
