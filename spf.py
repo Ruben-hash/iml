@@ -11,8 +11,12 @@ def checkSPF(msg):
     if not spf:
         print("Le message n'est pas spf")
     else:
-        matches = re.findall(r'\bpass\b', spf, re.IGNORECASE)
-        print(f"matches: {matches}")
+        matche = re.findall(r'\bpass\b', spf, re.IGNORECASE)
+        if matche:
+            domain = re.search(r'@([^\s]+)', spf, re.IGNORECASE)
+            print(f"Le message est spf et le domaine est: {domain.group(1)}")
+            ipdomain = re.search(r'client-ip=([^\s]+)', spf, re.IGNORECASE)
+            print(f"Le message est spf et l'ip est: {ipdomain.group(1)}")
         result = True
     return result
 

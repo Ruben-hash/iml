@@ -1,4 +1,3 @@
-from builtins import print
 from email import policy
 from email.parser import BytesParser
 from spf import checkSPF
