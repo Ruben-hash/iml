@@ -1,4 +1,8 @@
 import re
+from subprocess import run
+
+from apicall import check_api_IP
+
 
 def checkSPF(msg):
     """
@@ -13,10 +17,14 @@ def checkSPF(msg):
     else:
         matche = re.findall(r'\bpass\b', spf, re.IGNORECASE)
         if matche:
-            domain = re.search(r'@([^\s]+)', spf, re.IGNORECASE)
-            print(f"Le message est spf et le domaine est: {domain.group(1)}")
-            ipdomain = re.search(r'client-ip=([^\s]+)', spf, re.IGNORECASE)
-            print(f"Le message est spf et l'ip est: {ipdomain.group(1)}")
-        result = True
+            domain = re.search(r'domain of \S+@([\w.-]+)', spf, re.IGNORECASE)
+            ipdomain = re.search(r'client-ip=([\d.]+)', spf, re.IGNORECASE)
+            domainISP = re.findall(r'include:([^\s"]+)', run(["nslookup", "-type=TXT", domain.group(1)], capture_output=True, text=True).stdout.strip())
+            print(f"Le message est spf, domaine: {domain.group(1)}, ip: {ipdomain.group(1)}, domaine ISP: {domainISP}")
+            check_api_IP(ipdomain.group(1))
+            result = True
+        else:
+            print("Le message n'est pas spf")
+            result = False
     return result
 
